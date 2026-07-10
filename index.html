@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portail Incidents — ANAH Support</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:       #0f1117;
+      --paper:     #f5f3ee;
+      --cream:     #ede9e0;
+      --accent:    #c84b2f;
+      --accent2:   #1a3a5c;
+      --muted:     #7a7264;
+      --border:    #d4cebc;
+      --card-bg:   #ffffff;
+      --shadow:    0 4px 32px rgba(15,17,23,.08);
+      --radius:    4px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--paper);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ───── HEADER ───── */
+    header {
+      background: var(--accent2);
+      color: #fff;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      border-bottom: 3px solid var(--accent);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem;
+      letter-spacing: .02em;
+    }
+    .logo-badge {
+      background: var(--accent);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .65rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: .2rem .5rem;
+      border-radius: 2px;
+    }
+    .header-right {
+      font-size: .8rem;
+      font-weight: 300;
+      opacity: .75;
+      letter-spacing: .03em;
+    }
+
+    /* ───── HERO ───── */
+    .hero {
+      background: var(--accent2);
+      color: #fff;
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 40px,
+        rgba(255,255,255,.025) 40px,
+        rgba(255,255,255,.025) 80px
+      );
+    }
+    .hero-eyebrow {
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp .6s .1s ease forwards;
+    }
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      line-height: 1.1;
+      max-width: 720px;
+      margin: 0 auto 1.25rem;
+      opacity: 0;
+      animation: fadeUp .6s .2s ease forwards;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: #f0b88a;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      font-weight: 300;
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeUp .6s .3s ease forwards;
+    }
+    .cta-row {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp .6s .4s ease forwards;
+    }
+
+    /* ───── BUTTONS ───── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .8rem 1.8rem;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .9rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: transform .15s, box-shadow .15s, opacity .15s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(200,75,47,.35);
+    }
+    .btn-primary:hover { box-shadow: 0 8px 24px rgba(200,75,47,.45); }
+    .btn-ghost {
+      background: transparent;
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,.4);
+    }
+    .btn-ghost:hover { border-color: #fff; }
+
+    /* ───── STATUS BANNER ───── */
+    .status-bar {
+      background: var(--cream);
+      border-bottom: 1px solid var(--border);
+      padding: .6rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      font-size: .8rem;
+      flex-wrap: wrap;
+    }
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      font-weight: 500;
+    }
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-green  { background: #2ecc71; box-shadow: 0 0 0 3px rgba(46,204,113,.2); }
+    .dot-orange { background: #f39c12; box-shadow: 0 0 0 3px rgba(243,156,18,.2); }
+    .dot-red    { background: var(--accent); box-shadow: 0 0 0 3px rgba(200,75,47,.2); }
+
+    /* ───── MAIN CONTENT ───── */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+    }
+
+    .section-label {
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: .75rem;
+    }
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      margin-bottom: .75rem;
+    }
+    .section-subtitle {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 560px;
+    }
+
+    /* ───── HOW IT WORKS ───── */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      position: relative;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .step-card:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
+    .step-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 3rem;
+      color: var(--cream);
+      position: absolute;
+      top: .5rem;
+      right: 1rem;
+      line-height: 1;
+      user-select: none;
+    }
+    .step-icon {
+      width: 40px; height: 40px;
+      background: var(--accent2);
+      border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    .step-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: .5rem;
+    }
+    .step-card p {
+      font-size: .875rem;
+      color: var(--muted);
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    /* ───── REPORT SECTION ───── */
+    .report-section {
+      margin-top: 5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .report-section { grid-template-columns: 1fr; }
+    }
+
+    .info-panel {
+      position: sticky;
+      top: 90px;
+    }
+    .info-panel .section-title { font-size: 1.7rem; }
+
+    .severity-list {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+    .severity-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      border-left-width: 4px;
+    }
+    .sev-P1 { border-left-color: #c0392b; }
+    .sev-P2 { border-left-color: #e67e22; }
+    .sev-P3 { border-left-color: #f1c40f; }
+    .sev-P4 { border-left-color: #27ae60; }
+    .sev-badge {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      padding: .2rem .5rem;
+      border-radius: 2px;
+      color: #fff;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .sev-P1 .sev-badge { background: #c0392b; }
+    .sev-P2 .sev-badge { background: #e67e22; }
+    .sev-P3 .sev-badge { background: #f1c40f; color: #333; }
+    .sev-P4 .sev-badge { background: #27ae60; }
+    .sev-text h4 { font-size: .875rem; font-weight: 600; margin-bottom: .2rem; }
+    .sev-text p  { font-size: .8rem; color: var(--muted); line-height: 1.5; font-weight: 300; }
+
+    /* ───── COLLECTOR CARD ───── */
+    .collector-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .collector-header {
+      background: var(--accent2);
+      color: #fff;
+      padding: 1.5rem 2rem;
+    }
+    .collector-header h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      margin-bottom: .25rem;
+    }
+    .collector-header p {
+      font-size: .85rem;
+      opacity: .75;
+      font-weight: 300;
+    }
+    .collector-body {
+      padding: 2rem;
+    }
+    .collector-cta {
+      text-align: center;
+    }
+    .collector-cta p {
+      font-size: .875rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+      font-weight: 300;
+    }
+    .open-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 1rem 2.5rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: var(--radius);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      transition: transform .15s, box-shadow .15s;
+      box-shadow: 0 4px 20px rgba(200,75,47,.3);
+    }
+    .open-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(200,75,47,.4);
+    }
+    .open-btn svg { flex-shrink: 0; }
+    .collector-footer {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: .75rem;
+      color: var(--muted);
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .jira-badge {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      font-weight: 500;
+    }
+    .jira-badge svg { color: #0052CC; }
+
+    /* ───── FAQ ───── */
+    .faq-section { margin-top: 5rem; }
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .faq-card {
+      padding: 1.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    .faq-card h4 {
+      font-size: .95rem;
+      font-weight: 600;
+      margin-bottom: .5rem;
+    }
+    .faq-card p {
+      font-size: .85rem;
+      color: var(--muted);
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    /* ───── FOOTER ───── */
+    footer {
+      background: var(--ink);
+      color: rgba(255,255,255,.5);
+      text-align: center;
+      padding: 2rem;
+      font-size: .8rem;
+      font-weight: 300;
+    }
+    footer strong { color: rgba(255,255,255,.8); }
+
+    /* ───── ANIMATIONS ───── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ───── SCROLLBAR ───── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--paper); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+  <!-- JIRA ISSUE COLLECTOR -->
+  <!-- ATL_JQ_PAGE_PROPS.triggerFunction is only invoked when JSM collector triggerPosition = "CUSTOM".
+       Current config is "TOP", so we wire .open-collector buttons via jQuery('#atlwdg-trigger') instead. -->
+  <script>
+    window.ATL_JQ_PAGE_PROPS = {
+      triggerFunction: function(showCollectorDialog) {
+        document.querySelectorAll('.open-collector').forEach(el => {
+          el.addEventListener('click', function(e) {
+            e.preventDefault();
+            showCollectorDialog();
+          });
+        });
+      }
+    };
+  </script>
+  <script type="text/javascript" src="https://anah-produits-sandbox-296.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/kq7re0/b/1/c95134bc67d3a521bb3f4331beb9b804/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=0a507d68"></script>
+  <!-- Fallback wiring: collector triggerPosition is "TOP" so triggerFunction is never called.
+       Wire .open-collector buttons to the native Jira trigger instead. -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.open-collector').forEach(function(el) {
+        el.addEventListener('click', function(e) {
+          e.preventDefault();
+          var jiraTrigger = document.getElementById('atlwdg-trigger');
+          if (jiraTrigger && window.jQuery) {
+            window.jQuery(jiraTrigger).trigger('click');
+          }
+        });
+      });
+    });
+  </script>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <rect width="28" height="28" rx="4" fill="var(--accent)"/>
+        <path d="M7 21L14 7l7 14H7z" fill="#fff" opacity=".9"/>
+      </svg>
+      ANAH Support
+      <span class="logo-badge">Portail Incidents</span>
+    </div>
+    <div class="header-right">Agence Nationale de l'Habitat</div>
+  </header>
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-item"><span class="dot dot-green"></span>Système de gestion des logements — Opérationnel</span>
+    <span class="status-item"><span class="dot dot-orange"></span>Portail partenaires — Dégradé</span>
+    <span class="status-item"><span class="dot dot-green"></span>Plateforme Anah.fr — Opérationnel</span>
+    <span class="status-item"><span class="dot dot-red"></span>API Partenaires — Incident en cours</span>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-eyebrow">Support technique & fonctionnel</p>
+    <h1>Déclarez vos incidents <em>rapidement</em><br/>et efficacement</h1>
+    <p>Notre équipe support traite vos demandes en continu. Décrivez votre problème, nous prenons en charge le reste.</p>
+    <div class="cta-row">
+      <button class="btn btn-primary open-collector">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7-7 7 7"/></svg>
+        Déclarer un incident
+      </button>
+      <a href="#comment-ca-marche" class="btn btn-ghost">Comment ça marche ?</a>
+    </div>
+  </section>
+
+  <main>
+
+    <!-- HOW IT WORKS -->
+    <section id="comment-ca-marche">
+      <p class="section-label reveal">Processus</p>
+      <h2 class="section-title reveal">Comment fonctionne<br/>la déclaration d'incident ?</h2>
+      <p class="section-subtitle reveal">Un processus structuré pour garantir un traitement rapide et transparent de chaque incident signalé.</p>
+
+      <div class="steps-grid">
+        <div class="step-card reveal">
+          <span class="step-num">01</span>
+          <div class="step-icon">📝</div>
+          <h3>Décrivez le problème</h3>
+          <p>Remplissez le formulaire avec le maximum de détails : contexte, comportement observé, impact.</p>
+        </div>
+        <div class="step-card reveal">
+          <span class="step-num">02</span>
+          <div class="step-icon">🎟️</div>
+          <h3>Ticket automatique</h3>
+          <p>Un ticket Jira Service Management est créé instantanément avec un identifiant unique de suivi.</p>
+        </div>
+        <div class="step-card reveal">
+          <span class="step-num">03</span>
+          <div class="step-icon">🔍</div>
+          <h3>Qualification & triage</h3>
+          <p>Notre équipe analyse et qualifie l'incident selon sa priorité dans les délais SLA définis.</p>
+        </div>
+        <div class="step-card reveal">
+          <span class="step-num">04</span>
+          <div class="step-icon">✅</div>
+          <h3>Résolution & clôture</h3>
+          <p>Vous êtes notifié à chaque étape jusqu'à la résolution et la validation finale avec vous.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- REPORT SECTION -->
+    <section class="report-section" style="margin-top: 5rem;">
+
+      <div class="info-panel">
+        <p class="section-label reveal">Niveaux de priorité</p>
+        <h2 class="section-title reveal">Quelle est la sévérité<br/>de votre incident ?</h2>
+        <p class="section-subtitle reveal">Utilisez ces niveaux comme guide lors de la déclaration. L'équipe support pourra requalifier si nécessaire.</p>
+
+        <div class="severity-list">
+          <div class="severity-item sev-P1 reveal">
+            <span class="sev-badge">P1</span>
+            <div class="sev-text">
+              <h4>Critique — Service totalement indisponible</h4>
+              <p>Interruption complète d'un service en production. Aucune solution de contournement. Impact maximal.</p>
+            </div>
+          </div>
+          <div class="severity-item sev-P2 reveal">
+            <span class="sev-badge">P2</span>
+            <div class="sev-text">
+              <h4>Majeur — Fonctionnalité clé dégradée</h4>
+              <p>Fonctionnalité principale impactée, contournement partiel possible. Nombreux utilisateurs affectés.</p>
+            </div>
+          </div>
+          <div class="severity-item sev-P3 reveal">
+            <span class="sev-badge">P3</span>
+            <div class="sev-text">
+              <h4>Modéré — Impact limité</h4>
+              <p>Fonctionnalité secondaire impactée. Contournement disponible. Peu d'utilisateurs affectés.</p>
+            </div>
+          </div>
+          <div class="severity-item sev-P4 reveal">
+            <span class="sev-badge">P4</span>
+            <div class="sev-text">
+              <h4>Mineur — Anomalie cosmétique</h4>
+              <p>Défaut visuel ou comportement inattendu sans impact sur l'activité. Traitement dans les cycles normaux.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLLECTOR CARD -->
+      <div class="collector-card reveal">
+        <div class="collector-header">
+          <h3>Déclarer un incident</h3>
+          <p>Formulaire directement connecté à Jira Service Management</p>
+        </div>
+        <div class="collector-body">
+          <div class="collector-cta">
+            <p>
+              Cliquez sur le bouton ci-dessous pour ouvrir le formulaire de déclaration.<br/>
+              Un ticket sera créé automatiquement dans notre système de suivi et vous recevrez une confirmation par e-mail.
+            </p>
+            <button class="open-collector open-btn">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              Ouvrir le formulaire d'incident
+            </button>
+          </div>
+          <div class="collector-footer">
+            <div class="jira-badge">
+              <svg width="16" height="16" viewBox="0 0 32 32" fill="#0052CC"><path d="M16 0C7.2 0 0 7.2 0 16s7.2 16 16 16 16-7.2 16-16S24.8 0 16 0zm0 28C9.4 28 4 22.6 4 16S9.4 4 16 4s12 5.4 12 12-5.4 12-12 12z"/><path d="M16 8l-8 8 8 8 8-8z" fill="#0052CC"/></svg>
+              Propulsé par Jira Service Management
+            </div>
+            <span>Tickets traités 24h/24 — 5j/7</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section">
+      <p class="section-label reveal">FAQ</p>
+      <h2 class="section-title reveal">Questions fréquentes</h2>
+
+      <div class="faq-grid">
+        <div class="faq-card reveal">
+          <h4>Puis-je suivre l'avancement de mon ticket ?</h4>
+          <p>Oui, vous recevrez un e-mail avec le lien vers votre ticket dès sa création. Vous pouvez y consulter l'avancement en temps réel.</p>
+        </div>
+        <div class="faq-card reveal">
+          <h4>Quels délais de traitement ?</h4>
+          <p>Les tickets P1 sont pris en charge sous 30 minutes. P2 sous 2h. P3 et P4 sont traités dans les cycles normaux (24–72h ouvrées).</p>
+        </div>
+        <div class="faq-card reveal">
+          <h4>Puis-je joindre des captures d'écran ?</h4>
+          <p>Absolument. Le formulaire permet d'attacher des fichiers (PNG, JPEG, PDF) pour illustrer le problème rencontré.</p>
+        </div>
+        <div class="faq-card reveal">
+          <h4>Mon incident est urgent, quoi faire ?</h4>
+          <p>Sélectionnez la priorité P1 ou P2 dans le formulaire. Notre équipe astreinte sera automatiquement alertée.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 <strong>Agence Nationale de l'Habitat</strong> — Portail Support Interne &nbsp;|&nbsp; Powered by <strong>Jira Service Management Cloud</strong></p>
+  </footer>
+
+  <!-- REVEAL ANIMATIONS -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: .12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
