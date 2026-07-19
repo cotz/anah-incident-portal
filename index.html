@@ -459,12 +459,12 @@
   <!-- ATL_JQ_PAGE_PROPS.triggerFunction is only invoked when JSM collector triggerPosition = "CUSTOM".
        Current config is "TOP", so we wire .open-collector buttons via jQuery('#atlwdg-trigger') instead. -->
   <script>
-    // Format ISO 8601 attendu par le picker Jira datetime (YYYY-MM-DDTHH:mm)
+    // Format attendu par le picker Jira en locale fr : dd/MM/yyyy HH:mm
     function _jiraNow() {
       var d = new Date();
       var pad = function(n) { return String(n).padStart(2, '0'); };
-      return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate())
-           + 'T' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+      return pad(d.getDate()) + '/' + pad(d.getMonth()+1) + '/' + d.getFullYear()
+           + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
     }
 
     window.ATL_JQ_PAGE_PROPS = {
