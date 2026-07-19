@@ -459,7 +459,20 @@
   <!-- ATL_JQ_PAGE_PROPS.triggerFunction is only invoked when JSM collector triggerPosition = "CUSTOM".
        Current config is "TOP", so we wire .open-collector buttons via jQuery('#atlwdg-trigger') instead. -->
   <script>
+    // Format ISO 8601 attendu par le picker Jira datetime (YYYY-MM-DDTHH:mm)
+    function _jiraNow() {
+      var d = new Date();
+      var pad = function(n) { return String(n).padStart(2, '0'); };
+      return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate())
+           + 'T' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+    }
+
     window.ATL_JQ_PAGE_PROPS = {
+      // Pré-remplit "Date/heure de l'incident" avec l'heure courante
+      // Contourne le bug du picker datetime (bouton OK invisible dans la modale)
+      fieldValues: {
+        "customfield_12436": _jiraNow()
+      },
       triggerFunction: function(showCollectorDialog) {
         document.querySelectorAll('.open-collector').forEach(el => {
           el.addEventListener('click', function(e) {
